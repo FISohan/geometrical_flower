@@ -16,12 +16,21 @@ class Line extends Component {
   final minPetals = 6;
   final maxPetals = 15;
 
+  final double minPetalAngle;
+  final double maxPetalAngle;
+  final double minPetalLength;
+  final double maxPetalLength;
+
   Line({
     super.children,
     super.priority,
     super.key,
     required this.start,
     required this.end,
+    this.minPetalAngle = 10,
+    this.maxPetalAngle = 24,
+    this.minPetalLength = 55,
+    this.maxPetalLength = 60,
   }) : _endPoint = end;
 
   final Path _path = Path();
@@ -38,7 +47,13 @@ class Line extends Component {
     final int petals = random.nextIntBetween(minPetals, maxPetals);
 
     for (int i = 0; i < petals; i++) {
-      final Petal petal = Petal(endLinePosition: _endPoint);
+      final Petal petal = Petal(
+        endLinePosition: _endPoint,
+        minAngle: minPetalAngle,
+        maxAngle: maxPetalAngle,
+        minLength: minPetalLength,
+        maxLength: maxPetalLength,
+      );
       double angle = i * 2 * pi / petals + (Random().nextDouble() - 0.5) * 0.2;
       petal.angle += angle;
       add(petal);

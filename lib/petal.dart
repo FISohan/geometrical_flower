@@ -8,6 +8,11 @@ import 'package:geometry_flower/color.dart';
 
 class Petal extends PositionComponent {
   final Vector2 endLinePosition;
+  final double minAngle;
+  final double maxAngle;
+  final double minLength;
+  final double maxLength;
+
   double _angle = 20;
   double _length = 60;
   final Random _random = Random();
@@ -19,14 +24,15 @@ class Petal extends PositionComponent {
     super.priority,
     super.key,
     required this.endLinePosition,
+    this.minAngle = 10,
+    this.maxAngle = 24,
+    this.minLength = 55,
+    this.maxLength = 60,
   }) : super(position: endLinePosition, anchor: Anchor.center);
 
   void _generatePetal() {
-    const double minSize = 10;
-    const double maxSize = 24;
-
-    _angle = _random.nextDoubleBetween(minSize, maxSize);
-    _length = _random.nextDoubleBetween(55, 60);
+    _angle = _random.nextDoubleBetween(minAngle, maxAngle);
+    _length = _random.nextDoubleBetween(minLength, maxLength);
     final len1 =
         _length +
         _random.nextDoubleBetween(0, 15) * (_random.nextBool() ? -1 : 1);
