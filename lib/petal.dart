@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -57,6 +58,8 @@ class Petal extends PositionComponent {
   FutureOr<void> onLoad() async {
     await super.onLoad();
     _generatePetal();
+    add(ScaleEffect.to(Vector2.all(1), EffectController(duration: 0.5)));
+    scale = Vector2.zero();
     return super.onLoad();
   }
 

@@ -82,6 +82,11 @@ class Line extends Component {
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+  }
+
+  @override
   void render(Canvas canvas) {
     super.render(canvas);
 
@@ -90,6 +95,7 @@ class Line extends Component {
       5,
       Paint()..color = Colors.white,
     );
+
     canvas.drawPath(
       _path,
       Paint()
