@@ -75,15 +75,47 @@ class MainApp extends FlameGame {
     removeAll(children);
     Random random = Random();
 
-    final totalWidth = count * spacing;
-    final double leftMargin = (size.x - totalWidth) / 2;
+    // The maximum radius a petal can extend from the center of the flower.
+    // This accounts for the petal's own length, variations in length, and
+    // the "bending" of the stem.
+    const petalLengthVariation = 15.0;
+    const stemDeformation = 20.0;
+    final petalRadius = maxPetalLength + petalLengthVariation + stemDeformation;
+
+    // --- Horizontal constraints ---
+    final availableWidth = size.x - 2 * petalRadius;
+    if (count > 0 && availableWidth <= 0) {
+      // Screen is too narrow to draw even one flower without going off-screen.
+      return;
+    }
+
+    var usedSpacing = spacing;
+    if (count > 1 && (count - 1) * spacing > availableWidth) {
+      // Adjust spacing to fit all flowers within the available width.
+      usedSpacing = availableWidth / (count - 1);
+    }
+
+    final totalGroupWidth = count > 1 ? (count - 1) * usedSpacing : 0.0;
+    final leftFlowerX = (size.x - totalGroupWidth) / 2;
+
+    // --- Vertical constraints ---
+    final minStemHeight = 100.0; // Original minimum height.
+    final lowerStemBound = max(minStemHeight, petalRadius);
+    final upperStemBound = min(maxHeight, size.y - petalRadius);
+
+    if (lowerStemBound >= upperStemBound) {
+      // Not enough vertical space to draw flowers.
+      return;
+    }
 
     for (int i = 0; i < count; i++) {
+      final lineX = leftFlowerX + (i * usedSpacing);
+      final stemHeight = random.nextDoubleBetween(lowerStemBound, upperStemBound);
       final line = Line(
-        start: Vector2((i * spacing) + leftMargin, size.y),
+        start: Vector2(lineX, size.y),
         end: Vector2(
-          (i * spacing) + leftMargin,
-          size.y - random.nextDoubleBetween(100, maxHeight.clamp(0, size.y)),
+          lineX,
+          size.y - stemHeight,
         ),
         minPetalAngle: minPetalAngle,
         maxPetalAngle: maxPetalAngle,
